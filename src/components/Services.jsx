@@ -10,48 +10,6 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 
-// Custom text animation component
-const AnimatedText = ({
-                          text,
-                          direction = "up",
-                          delay = 0,
-                          className = "",
-                          type = "span",
-                      }) => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { triggerOnce: true, threshold: 0.1 });
-
-    const variants = {
-        hidden: {
-            opacity: 0,
-            y: direction === "up" ? 20 : direction === "down" ? -20 : 0,
-            x: direction === "left" ? 20 : direction === "right" ? -20 : 0,
-        },
-        show: {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            transition: {
-                duration: 0.7,
-                delay,
-            },
-        },
-    };
-
-    const Component = motion[type];
-
-    return (
-        <Component
-            ref={ref}
-            className={className}
-            variants={variants}
-            initial="hidden"
-            animate={isInView ? "show" : "hidden"}
-        >
-            {text}
-        </Component>
-    );
-};
 
 // Futuristic service card component
 const ServiceCard = ({ service, isActive, index, onClick }) => {

@@ -3,61 +3,8 @@
 import React, { useState, useRef } from 'react';
 import {AnimatePresence, motion, useScroll, useTransform} from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import AnimatedText from "@/components/ui/animatedtext";
 
-// Animated text component with word-by-word animation
-const AnimatedText = ({ text, direction = "up", delay = 0, className = "", stagger = 0.03 }) => {
-  const [ref, isInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  });
-
-  const words = text.split(" ");
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: stagger,
-        delayChildren: delay,
-      }
-    }
-  };
-
-  const wordVariants = {
-    hidden: {
-      opacity: 0,
-      y: direction === "up" ? 20 : direction === "down" ? -20 : 0,
-      x: direction === "left" ? 20 : direction === "right" ? -20 : 0,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      transition: {
-        duration: 0.5,
-      }
-    }
-  };
-
-  return (
-      <motion.span
-          ref={ref}
-          className={className}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "show" : "hidden"}
-      >
-        {words.map((word, i) => (
-            <motion.span key={i} variants={wordVariants} className="inline-block">
-              {word}{" "}
-            </motion.span>
-        ))}
-      </motion.span>
-  );
-};
-
-// Animated Input Component
 const AnimatedInput = ({
                          type = "text",
                          name,
@@ -148,7 +95,7 @@ const AnimatedInput = ({
   );
 };
 
-const FuturisticContact = () => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     businessName: '',
     firstName: '',
@@ -192,19 +139,82 @@ const FuturisticContact = () => {
       return;
     }
 
-    // Simulate form submission without API call
-    setTimeout(() => {
-      setResponseMessage('Thank you for your message! We will get back to you soon.');
-      setFormData({
-        businessName: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        message: '',
+    // Discord webhook URL
+    const webhookUrl = 'https://discord.com/api/webhooks/1345741574285561886/YCXE6ESW7j9Il2NP43wy5CqbJxfGCmWaK9ovWYdzhAYmJ6LrLAQ2-IB32aXPUrol3Sr8';
+
+    try {
+      // Prepare the message for Discord webhook
+      const discordMessage = {
+        embeds: [
+          {
+            title: `New Contact Form Submission`,
+            color: 0xa855f7, // Purple color
+            fields: [
+              {
+                name: 'Business Name',
+                value: formData.businessName || 'Not provided',
+                inline: true,
+              },
+              {
+                name: 'Name',
+                value: `${formData.firstName} ${formData.lastName}`,
+                inline: true,
+              },
+              {
+                name: 'Email',
+                value: formData.email,
+                inline: true,
+              },
+              {
+                name: 'Phone',
+                value: formData.phone || 'Not provided',
+                inline: true,
+              },
+              {
+                name: 'Message',
+                value: formData.message,
+                inline: false,
+              },
+            ],
+            timestamp: new Date().toISOString(),
+            footer: {
+              text: 'Sent from your website contact form'
+            }
+          }
+        ]
+      };
+
+      // Send the data to Discord webhook
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(discordMessage),
       });
+
+      if (response.ok) {
+        setResponseMessage('Thank you for your message! We will get back to you soon.');
+        // Reset form after successful submission
+        setFormData({
+          businessName: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          message: '',
+        });
+      } else {
+        // If there was an error with the webhook
+        console.error('Discord webhook error:', response.status);
+        setErrorMessage('There was an error sending your message. Please try again later or contact us directly via email.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setErrorMessage('There was an error sending your message. Please try again later or contact us directly via email.');
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   // Form section animation
@@ -315,10 +325,10 @@ const FuturisticContact = () => {
                     className="text-gray-300 font-light mb-12 leading-relaxed"
                 >
                   <AnimatedText
-                      text="We're ready to bring your digital vision to life. Let's collaborate and create something extraordinary together."
+                      text={"We're ready to bring your digital vision to life. Let's collaborate and create something extraordinary together."}
                       direction="up"
                       delay={0.4}
-                      className="font-light"
+                      className="font-light whitespace-normal"
                   />
                 </motion.p>
 
@@ -614,4 +624,4 @@ const FuturisticContact = () => {
   );
 };
 
-export default FuturisticContact;
+export default Contact;

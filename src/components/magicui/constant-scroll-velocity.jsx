@@ -8,7 +8,6 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-// Optimized infinite scrolling component
 function InfiniteScroll({ children, speed = 50, ...props }) {
     const containerRef = useRef(null);
     const scrollerRef = useRef(null);
@@ -18,11 +17,9 @@ function InfiniteScroll({ children, speed = 50, ...props }) {
     const [isInitialized, setIsInitialized] = useState(false);
     const positionRef = useRef(0);
 
-    // Initialize the component with the children passed in
     useEffect(() => {
         if (!children || React.Children.count(children) === 0) return;
 
-        // Convert children to array and assign keys
         const childrenArray = React.Children.toArray(children).map((child, index) =>
             React.cloneElement(child, { key: `original-${index}` })
         );
