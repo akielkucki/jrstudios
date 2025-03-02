@@ -101,7 +101,7 @@ const FuturisticNavbar = () => {
                                 variants={glowVariants}
                                 initial="initial"
                                 whileHover="hover"
-                                className={`relative text-white font-normal text-sm py-3 md:py-2 px-6 md:px-4 transition-all duration-300 ease-in ${
+                                className={`relative cursor-pointer text-white font-normal text-sm py-3 md:py-2 px-6 md:px-4 transition-all duration-300 ease-in ${
                                     activeNav === item.id
                                         ? 'text-purple-300 font-medium'
                                         : 'text-white hover:text-white'
