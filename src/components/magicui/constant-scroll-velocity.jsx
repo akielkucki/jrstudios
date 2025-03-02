@@ -148,8 +148,8 @@ export function ScrollingBrands({
                         <Image
                             src={brand.src}
                             alt={brand.alt}
-                            width={200}
-                            height={100}
+                            width={250}
+                            height={150}
                             className="object-contain fill-gray-100 max-h-16"
                             style={{
                                 display: 'flex',
